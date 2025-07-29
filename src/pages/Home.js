@@ -68,12 +68,19 @@ function Home() {
     setLoading(true);
     try {
       const res = await axios.get(`https://restcountries.com/v3.1/alpha/${code}`);
-      setCountryData(res.data);
+      console.log("Fetched border country data:", res.data[0]);
+      setCountryData(res.data[0]);
       setError("");
     } catch (err) {
       setError("Failed to fetch border country details.");
     }
     setLoading(false);
+  };
+
+  const handleCountrySelect = (country) => {
+    setCountryData(country);
+    setCountriesList([]);
+    setError("");
   };
 
   // Apply region filter by default when search is empty
@@ -143,15 +150,23 @@ function Home() {
 
       {countryData && (
         <div className="max-w-3xl mx-auto animate-fade-in">
-          <CountryDetails country={countryData} />
-          <h3 className="mt-4 font-semibold">Border Countries:</h3>
-          <Borders borders={countryData.borders} onSelect={handleBorderSelect} allCountries={allCountries} />
+          {console.log("Rendering CountryDetails with borders:", countryData.borders, "and allCountries length:", allCountries.length)}
+          <CountryDetails 
+            country={countryData} 
+            borders={countryData.borders} 
+            onSelect={handleBorderSelect} 
+            allCountries={allCountries} 
+          />
         </div>
       )}
       {countriesList.length > 0 && (
         <div className="max-w-3xl mx-auto animate-fade-in">
           <h3 className="mt-4 font-semibold">Countries List:</h3>
-          <CountriesList countries={countriesList} />
+          <CountriesList 
+            countries={countriesList} 
+            onSelectCountry={handleCountrySelect} 
+            allCountries={allCountries} 
+          />
         </div>
       )}
     </div>

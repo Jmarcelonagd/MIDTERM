@@ -1,4 +1,6 @@
-function CountryDetails({ country }) {
+import Borders from "./Borders";
+
+function CountryDetails({ country, borders, onSelect, allCountries }) {
   const languages = country.languages
     ? Object.values(country.languages).join(", ")
     : "N/A";
@@ -11,12 +13,18 @@ function CountryDetails({ country }) {
 
   return (
     <div className="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 p-6 rounded-lg shadow-md transition-colors duration-300 border border-gray-300 dark:border-gray-700">
-      <div className="flex flex-col md:flex-row gap-6">
-        <img
-          src={country.flags?.png || country.flags?.svg}
-          alt={`${country.name?.common} flag`}
-          className="w-64 h-40 object-cover rounded border"
-        />
+      <div className="flex flex-col gap-6">
+        <div>
+          <img
+            src={country.flags?.png || country.flags?.svg}
+            alt={`${country.name?.common} flag`}
+            className="w-64 h-40 object-cover rounded border"
+          />
+          <h3 className="mt-2 font-semibold">Border Countries:</h3>
+          <div className="max-w-full overflow-x-auto">
+            <Borders borders={borders || []} onSelect={onSelect} allCountries={allCountries} />
+          </div>
+        </div>
         <div>
           <h2 className="text-2xl font-bold mb-2">{country.name?.common}</h2>
           <p><strong>Capital:</strong> {country.capital?.[0] || "N/A"}</p>
